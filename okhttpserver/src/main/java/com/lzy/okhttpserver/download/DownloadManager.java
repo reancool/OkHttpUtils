@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.lzy.okhttpserver.download.db.DownloadDBManager;
 import com.lzy.okhttpserver.listener.DownloadListener;
 import com.lzy.okhttpserver.task.ExecutorWithListener;
+import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.request.BaseRequest;
 
 import java.io.File;
@@ -57,9 +58,13 @@ public class DownloadManager {
         mDownloadInfoList = Collections.synchronizedList(new ArrayList<DownloadInfo>());
         mDownloadUIHandler = new DownloadUIHandler();
         threadPool = new DownloadThreadPool();
+
         //初始化目标Download保存目录
-        String folder = Environment.getExternalStorageDirectory() + DM_TARGET_FOLDER;
-        if (!new File(folder).exists()) new File(folder).mkdirs();
+//        String folder = Environment.getExternalStorageDirectory() + DM_TARGET_FOLDER;
+        //修改为内置
+        String folder = OkHttpUtils.getContext().getExternalFilesDir(null)+ DM_TARGET_FOLDER;
+//        if (!new File(folder).exists())
+            new File(folder).mkdirs();
         mTargetFolder = folder;
 
         mDownloadInfoList = DownloadDBManager.INSTANCE.getAll(); //获取所有任务
